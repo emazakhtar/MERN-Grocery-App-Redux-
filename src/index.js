@@ -1,17 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import logger from "redux-logger";
+import thunk from "redux-thunk";
+import { cookiesReducer } from "./reducers/cookie";
+import { nutsReducer } from "./reducers/nut";
+import { fruitsReducer } from "./reducers/fruit";
+import { vegetablesReducer } from "./reducers/vegetable";
+import { loginReducer } from "./reducers/login";
+import { userReducer } from "./reducers/user";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+library.add(faHeart);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+library.add(faCheck);
+
+const store = createStore(
+  combineReducers({
+    cookies: cookiesReducer,
+    nuts: nutsReducer,
+    fruits: fruitsReducer,
+    vegetables: vegetablesReducer,
+    users: userReducer,
+    login: loginReducer,
+  }),
+  applyMiddleware(logger, thunk)
+);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
